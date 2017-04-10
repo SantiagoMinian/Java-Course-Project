@@ -5,10 +5,15 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.List;
 
-public abstract class GenericDAO<T, I> {
+public class GenericDAO<T, I> {
 
-    private EntityManagerFactory factory = Persistence.createEntityManagerFactory("HibernatePersistence");
-    protected EntityManager manager;
+    private static EntityManagerFactory factory = Persistence.createEntityManagerFactory("HibernatePersistence");
+    private EntityManager manager;
+    private Class<T> clazz;
+
+    public GenericDAO(Class<T> clazz) {
+        this.clazz = clazz;
+    }
 
     public void save(T object) {
 
@@ -28,7 +33,7 @@ public abstract class GenericDAO<T, I> {
         closeEntityManager();
     }
 
-    public void delete(Class<T> clazz, I id) {
+    public void delete(I id) {
 
         createEntityManager();
 
@@ -37,7 +42,7 @@ public abstract class GenericDAO<T, I> {
         closeEntityManager();
     }
 
-    public T findById(Class<T> clazz, I id) {
+    public T findById(I id) {
 
         createEntityManager();
 
@@ -48,28 +53,24 @@ public abstract class GenericDAO<T, I> {
         return object;
     }
 
-    public List<T> findAll(Class<T> clazz) {
+    public List<T> findAll() {
 
         createEntityManager();
 
-        List<T> objects = (List<T>) manager.createQuery("SELECT t FROM " + clazz.getSimpleName() + " t").getResultList();
+        List<T> objects = (List<T>) manager.createQuery("SELECT t FROM " + clazz.getSimpleName() + " t WHERE deleted = 0").getResultList();
 
         closeEntityManager();
 
         return objects;
     }
 
-    protected void createEntityManager() {
+    private void createEntityManager() {
         manager = factory.createEntityManager();
         manager.getTransaction().begin();
     }
 
-    protected void closeEntityManager() {
+    private void closeEntityManager() {
         manager.getTransaction().commit();
         manager.close();
-    }
-
-    public void close() {
-        factory.close();
     }
 }

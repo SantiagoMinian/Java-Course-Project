@@ -1,9 +1,8 @@
 package com.bcmworld.tp1.model.dtos;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Client")
@@ -25,7 +24,10 @@ public class ClientDTO {
 
     private String type;
 
-    private boolean deleted;
+    private boolean deleted = false;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "client")
+    private List<ContactDTO> contacts = new ArrayList<>();
 
     public String getCuitDNI() {
         return cuitDNI;
@@ -113,5 +115,21 @@ public class ClientDTO {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public List<ContactDTO> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<ContactDTO> contacts) {
+        this.contacts = contacts;
+    }
+
+    public void addContact(ContactDTO contact) {
+        contacts.add(contact);
+    }
+
+    public void deleteContact(ContactDTO contact) {
+        contacts.remove(contact);
     }
 }

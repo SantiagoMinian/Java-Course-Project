@@ -1,18 +1,30 @@
 package com.bcmworld.tp1;
 
-import com.bcmworld.tp1.model.daos.ClientDAO;
+import com.bcmworld.tp1.controller.ClientController;
+import com.bcmworld.tp1.model.daos.GenericDAO;
 import com.bcmworld.tp1.model.dtos.ClientDTO;
+import com.bcmworld.tp1.model.dtos.ContactDTO;
+import spark.ModelAndView;
+import spark.TemplateViewRoute;
+import spark.template.velocity.VelocityTemplateEngine;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.HashMap;
+import java.util.Map;
 
 import static spark.Spark.get;
 
 public class App {
     public static void main(String[] args) {
-        get("/hello", (req, res) -> "Hello Rochi");
-        get("/saclier", (req, res) -> "Lucas");
+        TemplateViewRoute route = (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            model.put("message", "Hello Velocity");
+            return new ModelAndView(model, "public/hello.vm");
+        };
+        get("/hello", route, new VelocityTemplateEngine());
+        get("/hola", (req, res) -> "Hola");
 
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("HibernatePersistence");
         EntityManager manager = factory.createEntityManager();
@@ -21,12 +33,30 @@ public class App {
         manager.close();
         factory.close();
 
+        ContactDTO contactPC = new ContactDTO();
+        contactPC.setName("papaColo");
+        ContactDTO contactMC = new ContactDTO();
+        contactMC.setName("mamaColo");
+
+        ContactDTO contactPCR = new ContactDTO();
+        contactPCR.setName("papaCragno");
+        ContactDTO contactMCR = new ContactDTO();
+        contactMCR.setName("mamaCragno");
+
         ClientDTO client = new ClientDTO();
         client.setCuitDNI("1");
         client.setName("colo");
+        contactPC.setClient(client);
+        contactMC.setClient(client);
+        client.addContact(contactMC);
+        client.addContact(contactPC);
         ClientDTO client2 = new ClientDTO();
         client2.setCuitDNI("2");
         client2.setName("cragno");
+        contactPCR.setClient(client2);
+        contactMCR.setClient(client2);
+        client2.addContact(contactMCR);
+        client2.addContact(contactPCR);
         ClientDTO client3 = new ClientDTO();
         client3.setCuitDNI("3");
         client3.setName("rochi");
@@ -34,28 +64,33 @@ public class App {
         client4.setCuitDNI("4");
         client4.setName("pelo");
 
-        ClientDAO cl = new ClientDAO();
+        GenericDAO<ClientDTO, String> cl = new GenericDAO<>(ClientDTO.class);
         cl.save(client);
         cl.save(client2);
         cl.save(client3);
         cl.save(client4);
 
-        client = cl.findById(ClientDTO.class, "1");
+        client = cl.findById("1");
         System.out.println(client.getName());
 
-        client2 = cl.findById(ClientDTO.class, "2");
+        client2 = cl.findById("2");
         System.out.println(client2.getName());
 
-        client3 = cl.findById(ClientDTO.class, "3");
+        client3 = cl.findById("3");
         System.out.println(client3.getName());
 
-        client4 = cl.findById(ClientDTO.class, "4");
+        client4 = cl.findById("4");
         System.out.println(client4.getName());
 
-        cl.delete(ClientDTO.class, "3");
+        cl.delete("3");
 
-        cl.findAll(ClientDTO.class).forEach(e -> System.out.println(e.isDeleted()));
+        cl.findAll().forEach(e -> System.out.println(e.isDeleted()));
 
-        cl.close();
+        cl.findById("2").getContacts().forEach(e -> System.out.println(e.getName()));
+        cl.findById("1").getContacts().forEach(e -> System.out.println(e.getName()));
+
+        cl.delete("2");
+
+        ClientController clientController = new ClientController();
     }
 }

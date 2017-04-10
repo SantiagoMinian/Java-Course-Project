@@ -18,6 +18,10 @@ public class ContactDTO {
 
     private boolean deleted;
 
+    @ManyToOne
+    @JoinColumn(name = "client_cuitDNI")
+    private ClientDTO client;
+
     public String getName() {
         return name;
     }
@@ -50,11 +54,11 @@ public class ContactDTO {
         this.position = position;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -64,5 +68,13 @@ public class ContactDTO {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public ClientDTO getClient() {
+        return client;
+    }
+
+    public void setClient(ClientDTO client) {
+        this.client = client;
     }
 }
