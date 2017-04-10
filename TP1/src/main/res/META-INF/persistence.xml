@@ -6,6 +6,8 @@
     <persistence-unit name="HibernatePersistence">
         <class>com.bcmworld.tp1.model.dtos.ClientDTO</class>
         <class>com.bcmworld.tp1.model.dtos.ContactDTO</class>
+        <class>com.bcmworld.tp1.model.dtos.ProductDTO</class>
+        <class>com.bcmworld.tp1.model.dtos.PriceDTO</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
@@ -16,7 +18,7 @@
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="false"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
-            <property name="hibernate.hbm2ddl.auto" value="create-drop" />
+            <property name="hibernate.hbm2ddl.auto" value="create" />
         </properties>
 
     </persistence-unit>
