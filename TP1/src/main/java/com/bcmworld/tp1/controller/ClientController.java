@@ -2,14 +2,16 @@ package com.bcmworld.tp1.controller;
 
 import com.bcmworld.tp1.model.daos.GenericDAO;
 import com.bcmworld.tp1.model.dtos.ClientDTO;
+import com.bcmworld.tp1.model.dtos.ContactDTO;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import spark.ModelAndView;
 import spark.Route;
 import spark.TemplateViewRoute;
 import spark.template.velocity.VelocityTemplateEngine;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.util.*;
 
 import static spark.Spark.*;
 
@@ -21,6 +23,7 @@ public class ClientController {
         clientDao = new GenericDAO<>(ClientDTO.class);
         get("/clients", getClientsRoute(), new VelocityTemplateEngine());
         get("/clients/:id", getClientRoute(), new VelocityTemplateEngine());
+        get("/clients/:id/json", getClientJsonRoute());
         post("/clients/add", getAddRoute());
         put("/clients/update", getUpdateRoute());
         delete("/clients/remove", getDeleteRoute());
@@ -30,7 +33,7 @@ public class ClientController {
         return (request, response) -> {
             Map<String, Object> model = new HashMap<>();
             model.put("clients", clientDao.findAll());
-            return new ModelAndView(model, "public/clients.vm");
+            return new ModelAndView(model, "public/velocity/clients.vm");
         };
     }
 
@@ -38,8 +41,20 @@ public class ClientController {
         return (request, response) -> {
             Map<String, Object> model = new HashMap<>();
             String id = request.params(":id");
-            model.put("client", clientDao.findById(id));
-            return new ModelAndView(model, "public/client.vm");
+            ClientDTO client = clientDao.findById(id);
+            model.put("client", client);
+            model.put("contacts", client.getContacts());
+            return new ModelAndView(model, "public/velocity/client.vm");
+        };
+    }
+
+    private Route getClientJsonRoute() {
+        return (request, response) -> {
+            String id = request.params(":id");
+            ClientDTO client = clientDao.findById(id);
+            client.setContacts(null);
+
+            return new Gson().toJson(client);
         };
     }
 

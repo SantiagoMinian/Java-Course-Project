@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+    <title>BCMWorld</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <!-- JQuery compiled and minified-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+    <script>
+        #include("public/js/client.js")
+
+
+
+
+
+
+
+    </script>
+</head>
+<body class="body">
+<div id="wrap">
+    <div id="main">
+        <div class="container-fluid">
+
+            <nav class="navbar navbar-inverse" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand">BCMWorld</a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="jumbotron">
+                <h2>$client.name $client.surname</h2>
+                <h4>$client.cuitDNI</h4>
+                <h4>$client.mail</h4>
+                <h4>$client.phone</h4>
+                <h4>$client.legalName</h4>
+                <h4>$client.longitude</h4>
+                <h4>$client.latitude</h4>
+                <h4>$client.address</h4>
+                <h4>$client.type</h4>
+            </div>
+
+
+            <br>
+            <h2>Contacts</h2><br>
+            <a href="#" onclick="form();" type="button" class="btn btn-primary botonAdmin">Add Contact</a>
+            <br><br>
+
+            <div id="popupbox" style="display:none;">
+
+                <form name="formalta" id="formalta">
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="Name" name="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="surname">Surname</label>
+                        <input type="text" class="form-control" id="surname" placeholder="Surname" name="surname">
+                    </div>
+                    <div class="form-group">
+                        <label for="position">Position</label>
+                        <input type="text" class="form-control" id="position" placeholder="Position" name="position">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" class="form-control" id="phone" placeholder="Phone" name="phone">
+                    </div>
+
+                    <a type="button" onclick="alta()" class="btn btn-default">Save</a>
+                    <a type="button" onclick="form('new', 'close')" class="btn btn-default">Cancel</a>
+                    <button type="reset" class="btn btn-default">Clean</button>
+                </form>
+            </div>
+
+            <div id="datos">
+                <table class="table table-striped">
+                    <tr class="active">
+                        <td>Name</td>
+                        <td>Surname</td>
+                        <td>Position</td>
+                        <td>Phone</td>
+                        <td colspan="2">Operaciones</td>
+                    </tr>
+                    #foreach($contact in $contacts)
+                    <tr>
+                        <td>$contact.name</td>
+                        <td>$contact.surname</td>
+                        <td>$contact.position</td>
+                        <td>$contact.phone</td>
+                        <td>
+                            <button onclick="" type="button" class="btn btn-primary botonAdmin">Delete</button>
+                        </td>
+                        <td>
+                            <button onclick="form('modify', 'open')" type="button" class="btn btn-primary botonAdmin">
+                                Modify
+                            </button>
+                        </td>
+                    </tr>
+                    #end
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

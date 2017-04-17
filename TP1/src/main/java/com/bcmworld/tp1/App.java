@@ -18,13 +18,6 @@ import static spark.Spark.get;
 
 public class App {
     public static void main(String[] args) {
-        TemplateViewRoute route = (request, response) -> {
-            Map<String, Object> model = new HashMap<>();
-            model.put("message", "Hello Velocity");
-            return new ModelAndView(model, "public/hello.vm");
-        };
-        get("/hello", route, new VelocityTemplateEngine());
-        get("/hola", (req, res) -> "Hola");
 
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("HibernatePersistence");
         EntityManager manager = factory.createEntityManager();

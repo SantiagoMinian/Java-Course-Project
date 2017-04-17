@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+    <title>BCMWorld</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <!-- JQuery compiled and minified-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+    <script>
+        #include("public/js/clients.js")
+    </script>
+</head>
+<body class="body">
+<div id="wrap">
+    <div id="main">
+        <div class="container-fluid">
+            <nav class="navbar navbar-inverse" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand">BCMWorld</a>
+                    </div>
+                </div>
+            </nav>
+
+            <a href="#" onclick="form('new', 'open');" type="button" class="btn btn-primary">New Client</a>
+            <br/><br/>
+            <div id="popupbox" style="display:none;">
+                <form name="formalta" id="formalta">
+                    <div class="form-group">
+                        <label for="cuitDNI">Cuit/DNI</label>
+                        <input type="text" class="form-control" id="cuitDNI" placeholder="Cuit/DNI" name="cuitDNI">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="Name" name="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="surname">Surname</label>
+                        <input type="text" class="form-control" id="surname" placeholder="Surname" name="surname">
+                    </div>
+                    <div class="form-group">
+                        <label for="legalName">Legal Name</label>
+                        <input type="text" class="form-control" id="legalName" placeholder="Legal Name" name="legalName">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" class="form-control" id="phone" placeholder="Phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="longitude">Longitude</label>
+                        <input type="text" class="form-control" id="longitude" placeholder="Longitude" name="longitude">
+                    </div>
+                    <div class="form-group">
+                        <label for="latitude">Latitude</label>
+                        <input type="text" class="form-control" id="latitude" placeholder="Latitude" name="latitude">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" class="form-control" id="address" placeholder="Address" name="address">
+                    </div>
+                    <div class="form-group">
+                        <label for="mail">Mail</label>
+                        <input type="text" class="form-control" id="mail" placeholder="Mail" name="mail">
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Type</label>
+                        <input type="text" class="form-control" id="type" placeholder="Type" name="type">
+                    </div>
+                    <a type="button" id="formSubmit" class="btn btn-default">Save</a>
+                    <a type="button" onclick="form('new', 'close', 0)" class="btn btn-default">Cancel</a>
+                    <button type="reset" class="btn btn-default">Clean</button>
+                </form>
+            </div>
+
+            <div id="datos">
+                <table class="table table-striped">
+                    <tr class="active">
+                        <td>Cuit/DNI</td>
+                        <td>Name</td>
+                        <td>Surname</td>
+                        <td>Legal name</td>
+                        <td>Phone</td>
+                        <td>Longitude</td>
+                        <td>Latitude</td>
+                        <td>Address</td>
+                        <td>Mail</td>
+                        <td>Type</td>
+                        <td colspan="3">Operations</td>
+                    </tr>
+                    #foreach($client in $clients)
+                    <tr>
+                        <td>$client.cuitDNI</td>
+                        <td>$client.name</td>
+                        <td>$client.surname</td>
+                        <td>$client.legalName</td>
+                        <td>$client.phone</td>
+                        <td>$client.longitude</td>
+                        <td>$client.latitude</td>
+                        <td>$client.address</td>
+                        <td>$client.mail</td>
+                        <td>$client.type</td>
+                        <td><a type="button" class="btn btn-primary" onclick="deleteClient($client.cuitDNI)">Delete</a></td>
+                        <td><a href="#" onclick="form('modify', 'open', $client.cuitDNI)" type="button"
+                               class="btn btn-primary">Modify</a></td>
+                        <td><a href="/clients/$client.cuitDNI" type="button" class="btn btn-primary">Examine</a></td>
+                    </tr>
+                    #end
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
