@@ -2,15 +2,12 @@ package com.bcmworld.tp1.controller;
 
 import com.bcmworld.tp1.model.daos.GenericDAO;
 import com.bcmworld.tp1.model.dtos.ClientDTO;
-import com.bcmworld.tp1.model.dtos.ContactDTO;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import spark.ModelAndView;
 import spark.Route;
 import spark.TemplateViewRoute;
 import spark.template.velocity.VelocityTemplateEngine;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 import static spark.Spark.*;
@@ -18,12 +15,13 @@ import static spark.Spark.*;
 public class ClientController {
 
     private GenericDAO<ClientDTO, String> clientDao;
+    private static final int CLIENTS_PER_PAGE = 10;
 
     public ClientController() {
         clientDao = new GenericDAO<>(ClientDTO.class);
-        get("/clients", getClientsRoute(), new VelocityTemplateEngine());
-        get("/clients/:id", getClientRoute(), new VelocityTemplateEngine());
-        get("/clients/:id/json", getClientJsonRoute());
+        get("/clients/:index", getClientsRoute(), new VelocityTemplateEngine());
+        get("/client/:id", getClientRoute(), new VelocityTemplateEngine());
+        get("/client/:id/json", getClientJsonRoute());
         post("/clients/add", getAddRoute());
         put("/clients/update", getUpdateRoute());
         delete("/clients/remove", getDeleteRoute());
@@ -32,7 +30,11 @@ public class ClientController {
     private TemplateViewRoute getClientsRoute() {
         return (request, response) -> {
             Map<String, Object> model = new HashMap<>();
-            model.put("clients", clientDao.findAll());
+            int index = Integer.valueOf(request.params(":index"));
+//            clientDao.findAll(index * CLIENTS_PER_PAGE, CLIENTS_PER_PAGE).forEach(clientDTO -> System.out.println(clientDTO.getName()));
+            model.put("clients", clientDao.findAll((index-1) * CLIENTS_PER_PAGE, CLIENTS_PER_PAGE));
+            model.put("index", index);
+            model.put("pages", Math.floor(clientDao.countAll() / CLIENTS_PER_PAGE) + 1);
             return new ModelAndView(model, "public/velocity/clients.vm");
         };
     }

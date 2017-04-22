@@ -115,10 +115,19 @@
                         <td><a type="button" class="btn btn-primary" onclick="deleteClient($client.cuitDNI)">Delete</a></td>
                         <td><a href="#" onclick="form('modify', 'open', $client.cuitDNI)" type="button"
                                class="btn btn-primary">Modify</a></td>
-                        <td><a href="/clients/$client.cuitDNI" type="button" class="btn btn-primary">Examine</a></td>
+                        <td><a href="/client/$client.cuitDNI" type="button" class="btn btn-primary">Examine</a></td>
                     </tr>
                     #end
                 </table>
+                <ul class="pagination">
+                    #foreach($i in [1..$pages])
+                    #if($i == $index)
+                    <li class="active"><a href="/clients/$i">$i</a></li>
+                    #else
+                    <li><a href="/clients/$i">$i</a></li>
+                    #end
+                    #end
+                </ul>
             </div>
         </div>
     </div>

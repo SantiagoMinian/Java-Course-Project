@@ -77,12 +77,28 @@ public class App {
 
         cl.delete("3");
 
-        cl.findAll().forEach(e -> System.out.println(e.isDeleted()));
+        System.out.println(cl.countAll());
 
         cl.findById("2").getContacts().forEach(e -> System.out.println(e.getName()));
         cl.findById("1").getContacts().forEach(e -> System.out.println(e.getName()));
 
         cl.delete("2");
+
+        ClientDTO clien = new ClientDTO();
+        clien.setType("Client");
+        clien.setAddress("1234");
+        clien.setLatitude(123);
+        clien.setLongitude(123);
+        clien.setPhone("+54");
+        clien.setLegalName("cljo");
+        clien.setSurname("jo");
+        clien.setMail("a@2.c");
+
+        for(Integer i = 10; i < 50; i++) {
+            clien.setCuitDNI(i.toString());
+            clien.setName("client" + i);
+            cl.save(clien);
+        }
 
         ClientController clientController = new ClientController();
     }

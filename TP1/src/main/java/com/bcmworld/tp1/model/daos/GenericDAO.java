@@ -1,8 +1,5 @@
 package com.bcmworld.tp1.model.daos;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -56,15 +53,28 @@ public class GenericDAO<T, I> {
         return object;
     }
 
-    public List<T> findAll() {
+    @SuppressWarnings("unchecked")
+    public List<T> findAll(int offset, int count) {
 
         createEntityManager();
 
-        List<T> objects = (List<T>) manager.createQuery("SELECT t FROM " + clazz.getSimpleName() + " t WHERE deleted = 0").getResultList();
+        List<T> objects = (List<T>) manager.createQuery("SELECT t FROM " + clazz.getSimpleName() + " t WHERE deleted = 0")
+                .setFirstResult(offset).setMaxResults(count).getResultList();
 
         closeEntityManager();
 
         return objects;
+    }
+
+    public Long countAll() {
+
+        createEntityManager();
+
+        Long count = (Long) manager.createQuery("SELECT COUNT(t) FROM " + clazz.getSimpleName() + " t WHERE deleted = 0").getSingleResult();
+
+        closeEntityManager();
+
+        return count;
     }
 
     private void createEntityManager() {

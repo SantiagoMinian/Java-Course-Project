@@ -21,24 +21,24 @@ function form(name, action, id){
 function saveClient() {
     var client = getClientFromForm();
     $.ajax({
-      		url: "/clients/add",
-     	 	type: "post",
-     	 	data: JSON.stringify(client),
-     	 	success: function(data){
-     	 	    location.reload();
-     	 	}
+        url: "/clients/add",
+        type: "post",
+        data: JSON.stringify(client),
+        success: function(data){
+            location.reload();
+        }
     });
 }
 
 function updateClient() {
     var client = getClientFromForm();
     $.ajax({
-      		url: "/clients/update",
-     	 	type: "put",
-     	 	data: JSON.stringify(client),
-     	 	success: function(data){
-     	 	    location.reload();
-     	 	}
+        url: "/clients/update",
+        type: "put",
+        data: JSON.stringify(client),
+        success: function(data){
+            location.reload();
+        }
     });
 }
 
@@ -55,7 +55,7 @@ function deleteClient(id) {
 
 function fillForm(id) {
     $.ajax({
-            url: "/clients/" + id + "/json",
+            url: "/client/" + id + "/json",
             type: "get",
             dataType: "json",
             success: function(data){
