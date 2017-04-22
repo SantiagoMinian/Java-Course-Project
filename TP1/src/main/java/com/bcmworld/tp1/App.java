@@ -87,8 +87,8 @@ public class App {
         ClientDTO clien = new ClientDTO();
         clien.setType("Client");
         clien.setAddress("1234");
-        clien.setLatitude(123);
-        clien.setLongitude(123);
+        clien.setLatitude(-34.5730052);
+        clien.setLongitude(-58.5042918);
         clien.setPhone("+54");
         clien.setLegalName("cljo");
         clien.setSurname("jo");
