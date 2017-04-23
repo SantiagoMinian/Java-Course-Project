@@ -2,7 +2,9 @@ function form(name, action, id){
     if(name == "new" && action == "open") {
         $("#popupbox").css("display", "block")
         $("#cuitDNI").prop('disabled', false);
-        $("#formSubmit").on("click", function() {
+        $("#formalta").on("submit", function(e) {
+            e.preventDefault();
+            e.returnValue = false;
             saveClient();
         });
     }
@@ -10,7 +12,9 @@ function form(name, action, id){
     else if (name == "modify" && action == "open") {
         $("#popupbox").css("display", "block")
         $("#cuitDNI").prop('disabled', true);
-        $("#formSubmit").on("click", function() {
+        $("#formalta").on("submit", function(e) {
+            e.preventDefault();
+            e.returnValue = false;
             updateClient();
         });
         fillForm(id);
