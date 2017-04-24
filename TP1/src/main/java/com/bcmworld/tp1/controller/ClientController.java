@@ -174,7 +174,7 @@ public class ClientController {
             error = true;
             invalid += "'type', ";
         } else if (!(myMap.get("type").equalsIgnoreCase("Client")
-                || myMap.get("type").equalsIgnoreCase("Contact"))) {
+                || myMap.get("type").equalsIgnoreCase("Company"))) {
             error = true;
             invalid += "'type', ";
         }
