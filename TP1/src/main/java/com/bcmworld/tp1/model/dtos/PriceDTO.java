@@ -2,6 +2,7 @@ package com.bcmworld.tp1.model.dtos;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "Price")
@@ -15,9 +16,8 @@ public class PriceDTO {
     private String list;
     private Date date;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private ProductDTO product;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "price")
+    private List<PriceListDTO> priceLists;
 
     public Long getId() {
         return id;
@@ -51,11 +51,11 @@ public class PriceDTO {
         this.date = date;
     }
 
-    public ProductDTO getProduct() {
-        return product;
+    public List<PriceListDTO> getPriceLists() {
+        return priceLists;
     }
 
-    public void setProduct(ProductDTO product) {
-        this.product = product;
+    public void setPriceLists(List<PriceListDTO> priceLists) {
+        this.priceLists = priceLists;
     }
 }

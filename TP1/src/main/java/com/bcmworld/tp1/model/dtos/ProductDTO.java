@@ -23,7 +23,7 @@ public class ProductDTO {
     private double cost;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "product")
-    private List<PriceDTO> prices;
+    private List<PriceListDTO> priceLists;
 
     public Long getId() {
         return id;
@@ -89,11 +89,11 @@ public class ProductDTO {
         this.cost = cost;
     }
 
-    public List<PriceDTO> getPrices() {
-        return prices;
+    public List<PriceListDTO> getPriceLists() {
+        return priceLists;
     }
 
-    public void setPrices(List<PriceDTO> prices) {
-        this.prices = prices;
+    public void setPriceLists(List<PriceListDTO> priceLists) {
+        this.priceLists = priceLists;
     }
 }
