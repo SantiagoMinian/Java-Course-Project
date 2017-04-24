@@ -22,7 +22,7 @@ public class ProductDTO {
     private int stock;
     private double cost;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "product")
+    @OneToMany(mappedBy = "product")
     private List<PriceListDTO> priceLists;
 
     public Long getId() {

@@ -16,7 +16,7 @@ public class PriceDTO {
     private String list;
     private Date date;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "price")
+    @OneToMany(mappedBy = "price")
     private List<PriceListDTO> priceLists;
 
     public Long getId() {

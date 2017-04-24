@@ -29,6 +29,10 @@ public class ClientDTO {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "client")
     private List<ContactDTO> contacts = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "priceList_id")
+    private PriceListDTO priceList;
+
     public String getCuitDNI() {
         return cuitDNI;
     }
@@ -131,5 +135,13 @@ public class ClientDTO {
 
     public void deleteContact(ContactDTO contact) {
         contacts.remove(contact);
+    }
+
+    public PriceListDTO getPriceList() {
+        return priceList;
+    }
+
+    public void setPriceList(PriceListDTO priceList) {
+        this.priceList = priceList;
     }
 }

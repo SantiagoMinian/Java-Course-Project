@@ -2,8 +2,7 @@ package com.bcmworld.tp1;
 
 import com.bcmworld.tp1.controller.ClientController;
 import com.bcmworld.tp1.model.daos.GenericDAO;
-import com.bcmworld.tp1.model.dtos.ClientDTO;
-import com.bcmworld.tp1.model.dtos.ContactDTO;
+import com.bcmworld.tp1.model.dtos.*;
 import spark.ModelAndView;
 import spark.TemplateViewRoute;
 import spark.template.velocity.VelocityTemplateEngine;
@@ -26,10 +25,24 @@ public class App {
         manager.close();
         factory.close();
 
-        ContactDTO contactPC = new ContactDTO();
-        contactPC.setName("papaColo");
-        ContactDTO contactMC = new ContactDTO();
-        contactMC.setName("mamaColo");
+        ProductDTO prod = new ProductDTO();
+        prod.setName("hola");
+
+        PriceDTO price = new PriceDTO();
+        price.setPrice(123);
+
+        PriceListDTO pl = new PriceListDTO();
+        pl.setProduct(prod);
+        pl.setPrice(price);
+
+        GenericDAO<PriceListDTO, Long> priceListDAO = new GenericDAO<>(PriceListDTO.class);
+
+        priceListDAO.save(pl);
+
+        ContactDTO contactP = new ContactDTO();
+        contactP.setName("papaColo");
+        ContactDTO contactM = new ContactDTO();
+        contactM.setName("mamaColo");
 
         ContactDTO contactPCR = new ContactDTO();
         contactPCR.setName("papaCragno");
@@ -39,10 +52,10 @@ public class App {
         ClientDTO client = new ClientDTO();
         client.setCuitDNI("1");
         client.setName("colo");
-        contactPC.setClient(client);
-        contactMC.setClient(client);
-        client.addContact(contactMC);
-        client.addContact(contactPC);
+        contactP.setClient(client);
+        contactM.setClient(client);
+        client.addContact(contactM);
+        client.addContact(contactP);
         ClientDTO client2 = new ClientDTO();
         client2.setCuitDNI("2");
         client2.setName("cragno");
@@ -93,6 +106,7 @@ public class App {
         clien.setLegalName("cljo");
         clien.setSurname("jo");
         clien.setMail("a@2.c");
+        clien.setPriceList(pl);
 
         for(Integer i = 10; i < 50; i++) {
             clien.setCuitDNI(i.toString());
