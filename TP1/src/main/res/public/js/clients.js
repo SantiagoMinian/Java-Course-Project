@@ -1,7 +1,8 @@
 function form(name, action, id){
     if(name == "new" && action == "open") {
-        $("#popupbox").css("display", "block")
+        $("#popupbox").css("display", "block");
         $("#cuitDNI").prop('disabled', false);
+        $("#formalta")[0].reset();
         $("#formalta").on("submit", function(e) {
             e.preventDefault();
             e.returnValue = false;
@@ -10,7 +11,7 @@ function form(name, action, id){
     }
     else if (name == "new" && action == "close") $("#popupbox").css("display", "none");
     else if (name == "modify" && action == "open") {
-        $("#popupbox").css("display", "block")
+        $("#popupbox").css("display", "block");
         $("#cuitDNI").prop('disabled', true);
         $("#formalta").on("submit", function(e) {
             e.preventDefault();
