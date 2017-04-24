@@ -60,6 +60,7 @@ public class ClientController {
             String id = request.params(":id");
             ClientDTO client = clientDao.findById(id);
             client.setContacts(null);
+            client.setPriceList(null);
 
             return new Gson().toJson(client);
         };

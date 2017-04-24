@@ -25,6 +25,22 @@ public class App {
         manager.close();
         factory.close();
 
+        ProductDetailDTO pd = new ProductDetailDTO();
+        pd.setAmount(50);
+
+        SaleDTO sale = new SaleDTO();
+        sale.setTotal(14000);
+        pd.setSale(sale);
+        sale.addProductDetail(pd);
+
+        SellerDTO seller = new SellerDTO();
+        seller.setName("pochi");
+        sale.setSeller(seller);
+        seller.addSale(sale);
+
+        GenericDAO<SellerDTO, Long> sellerDAO = new GenericDAO<>(SellerDTO.class);
+        sellerDAO.save(seller);
+
         ProductDTO prod = new ProductDTO();
         prod.setName("hola");
 
