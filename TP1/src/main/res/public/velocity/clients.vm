@@ -107,6 +107,9 @@
                 <a href="#" onclick="form('new', 'open');" style="display: inline-block;" type="button"
                    class="btn btn-primary">New Client</a>
 
+                <a href="/clients/export/excel" style="display: inline-block;" type="button"
+                   class="btn btn-primary">Export to Excel</a>
+
                 <div style="display: inline-block; float: right">
                     <select class="form-control" style="display: inline-block; width: 40%" id="filter" name="type"
                             required>

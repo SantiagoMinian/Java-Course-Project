@@ -1,5 +1,6 @@
 package com.bcmworld.tp1.controller;
 
+import com.bcmworld.tp1.ExcelExporter;
 import com.bcmworld.tp1.model.daos.GenericDAO;
 import com.bcmworld.tp1.model.dtos.ClientDTO;
 import com.google.gson.Gson;
@@ -8,12 +9,14 @@ import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.validator.routines.DoubleValidator;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.commons.validator.routines.RegexValidator;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import spark.ModelAndView;
 import spark.Route;
 import spark.TemplateViewRoute;
 import spark.template.velocity.VelocityTemplateEngine;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +34,7 @@ public class ClientController {
         get("/client/:id", getClientRoute(), new VelocityTemplateEngine());
         get("/clients/:filter/:value/:index", getFilteredClientsRoute(), new VelocityTemplateEngine());
         get("/client/:id/json", getClientJsonRoute());
+        get("/clients/export/excel", getExcelRoute());
         post("/clients/add", getAddRoute());
         put("/clients/update", getUpdateRoute());
         delete("/clients/remove", getDeleteRoute());
@@ -80,6 +84,24 @@ public class ClientController {
             client.setPriceList(null);
 
             return new Gson().toJson(client);
+        };
+    }
+
+    private Route getExcelRoute() {
+        return (request, response) -> {
+            response.type("application/vnd.ms-excel");
+            response.header("Content-Disposition", "attachment; filename=filename.xls");
+
+            List<List<Object>> clients = new ArrayList<>();
+            clientDao.findAll().forEach(clientDTO -> clients.add(clientDTO.toObjectList()));
+
+            HSSFWorkbook workbook = ExcelExporter.export(clients);
+
+            workbook.write(response.raw().getOutputStream());
+            workbook.close();
+
+            response.status(201);
+            return "{ \"result\" : \"OK\"}";
         };
     }
 

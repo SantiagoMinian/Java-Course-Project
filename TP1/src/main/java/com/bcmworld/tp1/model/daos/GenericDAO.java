@@ -55,6 +55,19 @@ public class GenericDAO<T, I> {
     }
 
     @SuppressWarnings("unchecked")
+    public List<T> findAll() {
+
+        createEntityManager();
+
+        List<T> objects = (List<T>) manager.createQuery("SELECT t FROM " + clazz.getSimpleName() + " t WHERE deleted = 0")
+                .getResultList();
+
+        closeEntityManager();
+
+        return objects;
+    }
+
+    @SuppressWarnings("unchecked")
     public List<T> findAll(int offset, int count) {
 
         createEntityManager();

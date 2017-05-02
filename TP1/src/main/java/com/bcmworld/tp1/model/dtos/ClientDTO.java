@@ -33,6 +33,23 @@ public class ClientDTO {
     @JoinColumn(name = "priceList_id")
     private PriceListDTO priceList;
 
+    public List<Object> toObjectList() {
+        List<Object> attributes = new ArrayList<>();
+
+        attributes.add(cuitDNI);
+        attributes.add(name);
+        attributes.add(surname);
+        attributes.add(legalName);
+        attributes.add(phone);
+        attributes.add(mail);
+        attributes.add(longitude);
+        attributes.add(latitude);
+        attributes.add(address);
+        attributes.add(type);
+
+        return attributes;
+    }
+
     public String getCuitDNI() {
         return cuitDNI;
     }
