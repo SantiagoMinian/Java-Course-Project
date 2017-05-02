@@ -42,6 +42,7 @@ public class GenericDAO<T, I> {
         closeEntityManager();
     }
 
+    // TODO: findById taking logically deleted entries into account
     public T findById(I id) {
 
         createEntityManager();
@@ -85,5 +86,32 @@ public class GenericDAO<T, I> {
     private void closeEntityManager() {
         manager.getTransaction().commit();
         manager.close();
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<T> findMany(String filter, String value, int offset, int count) {
+
+        createEntityManager();
+
+
+        List<T> objects = (List<T>) manager.createQuery("SELECT t FROM " + clazz.getSimpleName()
+                + " t WHERE deleted = 0 AND " + filter + " LIKE '%" + value + "%'")
+                .setFirstResult(offset).setMaxResults(count).getResultList();
+
+        closeEntityManager();
+
+        return objects;
+    }
+
+    public Long countMany(String filter, String value) {
+
+        createEntityManager();
+
+        Long count = (Long) manager.createQuery("SELECT COUNT(t) FROM " + clazz.getSimpleName()
+                + " t WHERE deleted = 0 AND " + filter + " LIKE '%" + value + "%'").getSingleResult();
+
+        closeEntityManager();
+
+        return count;
     }
 }

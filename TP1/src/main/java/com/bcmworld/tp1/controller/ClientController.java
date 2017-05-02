@@ -4,6 +4,7 @@ import com.bcmworld.tp1.model.daos.GenericDAO;
 import com.bcmworld.tp1.model.dtos.ClientDTO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.validator.routines.DoubleValidator;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.commons.validator.routines.RegexValidator;
@@ -14,6 +15,7 @@ import spark.template.velocity.VelocityTemplateEngine;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static spark.Spark.*;
@@ -21,12 +23,13 @@ import static spark.Spark.*;
 public class ClientController {
 
     private GenericDAO<ClientDTO, String> clientDao;
-    private static final int CLIENTS_PER_PAGE = 10;
+    private static final double CLIENTS_PER_PAGE = 10;
 
     public ClientController() {
         clientDao = new GenericDAO<>(ClientDTO.class);
         get("/clients/:index", getClientsRoute(), new VelocityTemplateEngine());
         get("/client/:id", getClientRoute(), new VelocityTemplateEngine());
+        get("/clients/:filter/:value/:index", getFilteredClientsRoute(), new VelocityTemplateEngine());
         get("/client/:id/json", getClientJsonRoute());
         post("/clients/add", getAddRoute());
         put("/clients/update", getUpdateRoute());
@@ -37,9 +40,9 @@ public class ClientController {
         return (request, response) -> {
             Map<String, Object> model = new HashMap<>();
             int index = Integer.valueOf(request.params(":index"));
-            model.put("clients", clientDao.findAll((index - 1) * CLIENTS_PER_PAGE, CLIENTS_PER_PAGE));
+            model.put("clients", clientDao.findAll((index - 1) * (int) CLIENTS_PER_PAGE, (int) CLIENTS_PER_PAGE));
             model.put("index", index);
-            model.put("pages", Math.floor(clientDao.countAll() / CLIENTS_PER_PAGE) + 1);
+            model.put("pages", Math.ceil(clientDao.countAll() / CLIENTS_PER_PAGE));
             return new ModelAndView(model, "public/velocity/clients.vm");
         };
     }
@@ -52,6 +55,20 @@ public class ClientController {
             model.put("client", client);
             model.put("contacts", client.getContacts());
             return new ModelAndView(model, "public/velocity/client.vm");
+        };
+    }
+
+    private TemplateViewRoute getFilteredClientsRoute() {
+        return (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            String filter = request.params(":filter");
+            String value = request.params(":value");
+            int index = Integer.valueOf(request.params(":index"));
+            List<ClientDTO> clients = clientDao.findMany(filter, value, (index - 1) * (int) CLIENTS_PER_PAGE, (int) CLIENTS_PER_PAGE);
+            model.put("clients", clients);
+            model.put("index", index);
+            model.put("pages", Math.ceil(clientDao.countMany(filter, value) / CLIENTS_PER_PAGE));
+            return new ModelAndView(model, "public/velocity/clients.vm");
         };
     }
 

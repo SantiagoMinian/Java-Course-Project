@@ -92,3 +92,17 @@ function getClientFromForm() {
                          type: $("#type").val()
     }
 }
+
+function page(index) {
+    var url = document.URL;
+    var indexOfPageIndex = url.lastIndexOf("/") + 1;
+
+    window.location.href = url.substring(0, indexOfPageIndex) + index;
+}
+
+function search() {
+    var filter = $("#filter").val();
+    var value = $("#value").val();
+
+    window.location.href = "/clients/" + filter + "/" + value + "/1";
+}
