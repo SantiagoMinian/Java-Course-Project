@@ -110,6 +110,9 @@
                 <a href="/clients/export/excel" style="display: inline-block;" type="button"
                    class="btn btn-primary">Export to Excel</a>
 
+                <a href="/clients/export/pdf" style="display: inline-block;" type="button"
+                   class="btn btn-primary">Export to PDF</a>
+
                 <div style="display: inline-block; float: right">
                     <select class="form-control" style="display: inline-block; width: 40%" id="filter" name="type"
                             required>

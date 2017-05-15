@@ -72,5 +72,10 @@
             <artifactId>poi</artifactId>
             <version>3.16</version>
         </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.11</version>
+        </dependency>
     </dependencies>
 </project>

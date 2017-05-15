@@ -1,11 +1,11 @@
 package com.bcmworld.tp1.controller;
 
-import com.bcmworld.tp1.ExcelExporter;
+import com.bcmworld.tp1.utils.ExcelExporter;
+import com.bcmworld.tp1.utils.PDFExporter;
 import com.bcmworld.tp1.model.daos.GenericDAO;
 import com.bcmworld.tp1.model.dtos.ClientDTO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.validator.routines.DoubleValidator;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.commons.validator.routines.RegexValidator;
@@ -35,6 +35,7 @@ public class ClientController {
         get("/clients/:filter/:value/:index", getFilteredClientsRoute(), new VelocityTemplateEngine());
         get("/client/:id/json", getClientJsonRoute());
         get("/clients/export/excel", getExcelRoute());
+        get("/clients/export/pdf", getPDFRoute());
         post("/clients/add", getAddRoute());
         put("/clients/update", getUpdateRoute());
         delete("/clients/remove", getDeleteRoute());
@@ -99,6 +100,21 @@ public class ClientController {
 
             workbook.write(response.raw().getOutputStream());
             workbook.close();
+
+            response.status(201);
+            return "{ \"result\" : \"OK\"}";
+        };
+    }
+
+    private Route getPDFRoute() {
+        return (request, response) -> {
+            response.type("application/pdf");
+            response.header("Content-Disposition", "attachment; filename=filename.pdf");
+
+            List<List<Object>> clients = new ArrayList<>();
+            clientDao.findAll().forEach(clientDTO -> clients.add(clientDTO.toObjectList()));
+
+            PDFExporter.export(clients, response.raw().getOutputStream());
 
             response.status(201);
             return "{ \"result\" : \"OK\"}";
