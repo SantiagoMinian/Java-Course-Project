@@ -45,21 +45,20 @@ public class App {
         payment.add(debit, 199.5);
         payment.add(credit, 0.5);
 
-        ProductDTO prod = new ProductDTO();
-        prod.setName("hola");
-
         PriceDTO price = new PriceDTO();
         price.setPrice(123);
 
-        PriceListDTO pl = new PriceListDTO();
-        pl.setProduct(prod);
-        pl.setPrice(price);
 
-        GenericDAO<PriceListDTO, Long> priceListDAO = new GenericDAO<>(PriceListDTO.class);
-
-        priceListDAO.save(pl);
-
-        GenericDAO<ClientDTO, String> clientDAO = new GenericDAO<>(ClientDTO.class);
+        ProductDTO prod = new ProductDTO();
+        prod.setName("hola");
+        prod.setOnSale(true);
+        prod.setSalePercentage(0.8);
+        prod.setCode("123");
+        prod.setImage("asd");
+        prod.setStock(10);
+        prod.setSubtype("tort");
+        prod.setType("a");
+        prod.setCost(10.0);
 
         ClientDTO clien = new ClientDTO();
         clien.setType("Client");
@@ -70,16 +69,31 @@ public class App {
         clien.setLegalName("cljo");
         clien.setSurname("jo");
         clien.setMail("a@2.c");
-        clien.setPriceList(pl);
 
+        GenericDAO<ClientDTO, String> clientDAO = new GenericDAO<>(ClientDTO.class);
+        GenericDAO<ProductDTO, Long> productDAO = new GenericDAO<>(ProductDTO.class);
         for(Integer i = 10; i < 50; i++) {
             clien.setCuitDNI(i.toString());
             clien.setName("client" + i);
             clientDAO.save(clien);
         }
 
+        clien.setCuitDNI("5");
+        clientDAO.save(clien);
+        productDAO.save(prod);
+
+        prod = productDAO.findById(1L);
+        clien = clientDAO.findById("5");
+
+        prod.addObserver(clien);
+        //clien.addInterest(prod);
+
+        productDAO.update(prod);
+        //clientDAO.update(clien);
+
         ClientController clientController = new ClientController();
 
         payment.charge();
+        productDAO.findById(1L).setSale(0.8);
     }
 }

@@ -16,8 +16,9 @@ public class PriceDTO {
     private String list;
     private Date date;
 
-    @OneToMany(mappedBy = "price")
-    private List<PriceListDTO> priceLists;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private ProductDTO product;
 
     public Long getId() {
         return id;
@@ -49,13 +50,5 @@ public class PriceDTO {
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    public List<PriceListDTO> getPriceLists() {
-        return priceLists;
-    }
-
-    public void setPriceLists(List<PriceListDTO> priceLists) {
-        this.priceLists = priceLists;
     }
 }

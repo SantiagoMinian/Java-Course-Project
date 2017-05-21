@@ -22,6 +22,8 @@ public class ClientDTO {
     private double latitude;
     private String address;
 
+    private String priceList;
+
     private String type;
 
     private boolean deleted = false;
@@ -29,9 +31,10 @@ public class ClientDTO {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "client")
     private List<ContactDTO> contacts = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "priceList_id")
-    private PriceListDTO priceList;
+    public void update(ProductDTO product) {
+        // TODO: Notify this client
+        System.out.println("Client: " + cuitDNI + " Prod: " + product.getId());
+    }
 
     public List<Object> toObjectList() {
         List<Object> attributes = new ArrayList<>();
@@ -154,11 +157,11 @@ public class ClientDTO {
         contacts.remove(contact);
     }
 
-    public PriceListDTO getPriceList() {
+    public String getPriceList() {
         return priceList;
     }
 
-    public void setPriceList(PriceListDTO priceList) {
+    public void setPriceList(String priceList) {
         this.priceList = priceList;
     }
 }

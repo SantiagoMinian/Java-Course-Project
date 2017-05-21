@@ -17,7 +17,6 @@ public class CompositePaymentMethod {
         paymentMethods.put(paymentMethod, amount);
     }
 
-    //Removes the graphic from the composition.
     public void remove(PaymentMethodStrategy paymentMethod) {
         paymentMethods.remove(paymentMethod);
     }

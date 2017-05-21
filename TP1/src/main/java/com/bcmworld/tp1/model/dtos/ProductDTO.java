@@ -1,7 +1,9 @@
 package com.bcmworld.tp1.model.dtos;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "Product")
@@ -22,8 +24,17 @@ public class ProductDTO {
     private int stock;
     private double cost;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-    private List<PriceListDTO> priceLists;
+    private boolean onSale = false;
+    private double salePercentage = 1;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "product")
+    private List<PriceDTO> prices = new ArrayList<>();
+
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(name="Client_Product",
+            joinColumns={@JoinColumn(name="id")},
+            inverseJoinColumns={@JoinColumn(name="cuitDNI")})
+    private List<ClientDTO> observers = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -89,11 +100,77 @@ public class ProductDTO {
         this.cost = cost;
     }
 
-    public List<PriceListDTO> getPriceLists() {
-        return priceLists;
+    public List<PriceDTO> getPrices() {
+        return prices;
     }
 
-    public void setPriceLists(List<PriceListDTO> priceLists) {
-        this.priceLists = priceLists;
+    public void setPrices(List<PriceDTO> prices) {
+        this.prices = prices;
+    }
+
+    public boolean isOnSale() {
+        return onSale;
+    }
+
+    public void setOnSale(boolean onSale) {
+        this.onSale = onSale;
+    }
+
+    public double getSalePercentage() {
+        return salePercentage;
+    }
+
+    public void setSalePercentage(double salePercentage) {
+        this.salePercentage = salePercentage;
+    }
+
+    public double getCurrentPrice(String list) {
+
+        List<PriceDTO> prices = getPriceHistory(list);
+        PriceDTO newest = null;
+        for (PriceDTO price : prices) {
+
+            if (newest == null) newest = price;
+            if (price.getDate().after(newest.getDate())) newest = price;
+        }
+        return newest.getPrice();
+    }
+
+    public List<PriceDTO> getPriceHistory(String list) {
+        return prices.stream()
+                .filter(price -> price.getList().equals(list))
+                .collect(Collectors.toList());
+    }
+
+    public List<ClientDTO> getObservers() {
+        return observers;
+    }
+
+    public void setObservers(List<ClientDTO> observers) {
+        this.observers = observers;
+    }
+
+    public void addObserver(ClientDTO observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(ClientDTO observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers() {
+        if (!onSale) return;
+        for (ClientDTO observer : observers) observer.update(this);
+    }
+
+    public void setSale(double salePercentage) {
+        setOnSale(true);
+        setSalePercentage(salePercentage);
+        notifyObservers();
+    }
+
+    public void finishSale() {
+        setOnSale(false);
+        setSalePercentage(1.0);
     }
 }
