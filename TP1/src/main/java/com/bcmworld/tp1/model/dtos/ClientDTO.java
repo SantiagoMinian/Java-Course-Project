@@ -1,5 +1,7 @@
 package com.bcmworld.tp1.model.dtos;
 
+import com.bcmworld.tp1.telegram.SaclierBot;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,7 @@ public class ClientDTO {
 
     private String phone;
     private String mail;
+    private Long telegramId = null;
 
     private double longitude;
     private double latitude;
@@ -32,8 +35,9 @@ public class ClientDTO {
     private List<ContactDTO> contacts = new ArrayList<>();
 
     public void update(ProductDTO product) {
-        // TODO: Notify this client
-        System.out.println("Client: " + cuitDNI + " Prod: " + product.getId());
+        String sale = "Hello " + name + "! " + product.getName() + "s are now "
+                + (100 - (product.getSalePercentage() * 100.0)) + "% off on our website";
+        if(telegramId != null) SaclierBot.getInstance().sendMessage(sale, telegramId);
     }
 
     public List<Object> toObjectList() {
@@ -163,5 +167,13 @@ public class ClientDTO {
 
     public void setPriceList(String priceList) {
         this.priceList = priceList;
+    }
+
+    public Long getTelegramId() {
+        return telegramId;
+    }
+
+    public void setTelegramId(Long telegramId) {
+        this.telegramId = telegramId;
     }
 }

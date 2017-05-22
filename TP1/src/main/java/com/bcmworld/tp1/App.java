@@ -2,21 +2,20 @@ package com.bcmworld.tp1;
 
 import com.bcmworld.tp1.controller.ClientController;
 import com.bcmworld.tp1.model.daos.GenericDAO;
-import com.bcmworld.tp1.model.dtos.*;
+import com.bcmworld.tp1.model.dtos.ClientDTO;
+import com.bcmworld.tp1.model.dtos.PriceDTO;
+import com.bcmworld.tp1.model.dtos.ProductDTO;
 import com.bcmworld.tp1.payment.CardStrategy;
 import com.bcmworld.tp1.payment.CompositePaymentMethod;
-import spark.ModelAndView;
-import spark.TemplateViewRoute;
-import spark.template.velocity.VelocityTemplateEngine;
+import com.bcmworld.tp1.telegram.SaclierBot;
+import org.telegram.telegrambots.ApiContextInitializer;
+import org.telegram.telegrambots.TelegramBotsApi;
+import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import static spark.Spark.get;
 
 public class App {
     public static void main(String[] args) {
@@ -72,13 +71,15 @@ public class App {
 
         GenericDAO<ClientDTO, String> clientDAO = new GenericDAO<>(ClientDTO.class);
         GenericDAO<ProductDTO, Long> productDAO = new GenericDAO<>(ProductDTO.class);
-        for(Integer i = 10; i < 50; i++) {
+        for (Integer i = 10; i < 50; i++) {
             clien.setCuitDNI(i.toString());
             clien.setName("client" + i);
             clientDAO.save(clien);
         }
 
         clien.setCuitDNI("5");
+        clien.setTelegramId(259628094L);
+        clien.setName("Santiago");
         clientDAO.save(clien);
         productDAO.save(prod);
 
@@ -94,6 +95,15 @@ public class App {
         ClientController clientController = new ClientController();
 
         payment.charge();
+
+        ApiContextInitializer.init();
+        TelegramBotsApi botsApi = new TelegramBotsApi();
+        try {
+            botsApi.registerBot(SaclierBot.getInstance());
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+
         productDAO.findById(1L).setSale(0.8);
     }
 }
